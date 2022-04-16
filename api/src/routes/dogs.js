@@ -9,35 +9,57 @@ router.get('/', async function(req, res) {
     if(req.query.name){
         const queryBreeds = await Dog.findAll({
             where: {
-                [Op.contains]: {name: req.query.name}
+                name: {
+                    [Op.startsWith]: req.query.name
+                }
             }
         });
-        res.json(queryBreeds.map(elem => {
+        const newArrBreeds = Promise.all(queryBreeds.map(async elem => {
+            let temper = await elem.getTempers();
             return {
                 name: elem.name,
                 weight: elem. weight,
-                temp: queryBreeds.getTempers()
+                temper: temper.map(temper => temper.name)
             }
         }));
+        res.json(await newArrBreeds);
     }
 
     // Si no entran parámetros por query...
     else {
-        const localDogs = await Dog.findAll();
-        res.json(localDogs.map(elem => {
-            return {
+        const allBreeds = await Dog.findAll();          
+        const newArrBreeds = await Promise.all(allBreeds.map(async elem => {
+            let temper = await elem.getTempers();
+            let breed = {
                 name: elem.name,
-                weight: elem. weight,
-                temp: queryDogs.getTempers(),
+                weight: elem. weight, 
+                temper: temper.map(temper => temper.name) 
             }
+            return breed;
         }));
+        res.json(await newArrBreeds);
     };
 });
 
 // GET dogs/:idRaza
 router.get('/:idRaza', async function(req, res) {
-    const {breedDetail} = await Dog.findByPk(req.params.idRaza);
-    res.json(breedDetail);
+    const breedDetail = await Dog.findByPk(req.params.idRaza);
+    if (!!breedDetail) {
+        let tempers = await breedDetail.getTempers();
+        let finalDetail = tempers.map(temper => temper.name);
+        res.json({ 
+            name: breedDetail.name,
+            temper: finalDetail,
+            height: breedDetail.height,
+            weight: breedDetail.weight,
+            maxAge: breedDetail.maxAge
+        });
+    }
+    else {
+        res.status(404).json({
+            error: 'Dog ID requested not found'
+        }) 
+    }
 });
 
 // POST dogs/

@@ -1,0 +1,27 @@
+.search-container {
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 95%;
+    margin: 0 auto;
+    min-height: 60px;   
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1%;
+    background-color: rgba(43, 92, 226, 0.562);
+}
+
+.button {
+    border: 1px solid grey;
+    height: 50px;
+    margin-left: 10px;
+    border-radius: 10px;
+}
+
+.input {
+    border: 1px solid grey;
+    height: 47px;
+    border-radius: 10px;
+    font-size: large;
+    width: 70%;
+}

@@ -1,0 +1,9 @@
+.filtersContainer {
+    width: 30%;
+    min-height: 300px;
+    border: 1px solid black;
+    border-radius: 5px;
+    padding: 1.5%;
+    background-color: blueviolet;
+    display: flex;
+}

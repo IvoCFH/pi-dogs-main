@@ -17,6 +17,7 @@ router.get('/', async function(req, res) {
         const newArrBreeds = Promise.all(queryBreeds.map(async elem => {
             let temper = await elem.getTempers();
             return {
+                id: elem.id,
                 name: elem.name,
                 weight: elem. weight,
                 temper: temper.map(temper => temper.name)
@@ -31,6 +32,7 @@ router.get('/', async function(req, res) {
         const newArrBreeds = await Promise.all(allBreeds.map(async elem => {
             let temper = await elem.getTempers();
             let breed = {
+                id: elem.id,
                 name: elem.name,
                 weight: elem. weight, 
                 temper: temper.map(temper => temper.name) 

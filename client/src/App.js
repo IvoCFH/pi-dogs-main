@@ -1,8 +1,8 @@
 import './App.css';
 import React from 'react';
+import { Route } from 'react-router-dom';
 import Login from './components/login/login';
 import Home from './components/home/home'
-import { Route } from 'react-router-dom';
 
 function App() {
   return (

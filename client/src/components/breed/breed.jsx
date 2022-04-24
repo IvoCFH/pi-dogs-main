@@ -1,11 +1,30 @@
 import './breed.css';
 import { Component } from 'react';
+import { connect } from 'react-redux';
 
-export default function Breed({breed, img, temperament, weight}) {
-    return (
-        <div className='breedContainer'>
-              {breed}
-        </div>
-    )
-        
+export class Breed extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            breed: {}            
+        }
+    }
+    
+    render() {
+        return (
+            <div className='breedContainer'>
+                {this.props.breed}
+            </div>
+        )
+    };
 }
+
+function mapStateToProps(state) {
+    
+};
+
+function mapDispatchToProps(dispatch) {
+
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Breed);

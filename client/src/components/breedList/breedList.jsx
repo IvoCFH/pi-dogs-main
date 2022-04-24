@@ -1,15 +1,41 @@
 import './breedList.css';
 import { Component } from 'react';
-import Breed from '../breed/breed';
+import { connect } from 'react-redux';
+import { Breed } from '../breed/breed';
 
-export default function breedList({ breedArray }) {
-    return (
-        <div className='listContainer'>
-            {breedArray.map( breed => {
-                return (
-                    <Breed breed={breed}/>
-                )
-            })}
-        </div>
-    )
+export class BreedList extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            
+        }
+    }
+    
+
+    render() {
+        let breedArray = ['Dogo','Doverman'];
+        return (
+            <div className='listContainer'>
+                {breedArray.map( (breed,i) => {
+                    return (
+                        <Breed key={i} breed={breed}/>
+                    )
+                })}
+            </div>
+        )
+    }
 }
+
+
+function mapStateToProps(state) {
+    return {}
+};
+
+function mapDispatchToProps(daspatch) {
+    return {}
+};
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(BreedList) 

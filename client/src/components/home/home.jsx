@@ -6,6 +6,10 @@ import Filters from '../filters/filters';
 import BreedList from '../breedList/breedList';
 
 export class Home extends Component {
+    componentDidMount() {
+
+    };
+    
     render() {
         return (
             <>
@@ -15,19 +19,19 @@ export class Home extends Component {
                     <SearchBar />
                     <div className='visualizer'>
                         <Filters />
-                        <BreedList breedArray={['Chiwawa','Dogo', 'RotWiller']}/>
+                        <BreedList />
                     </div>
                 </div>
             </>
         )
-    }
+    };
 }
 
 function mapStateToProps(state) {
     return {}
 };
 
-function mapDispatchToProps(daspatch) {
+function mapDispatchToProps(dispatch) {
     return {}
 };
 

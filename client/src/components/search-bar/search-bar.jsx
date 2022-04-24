@@ -1,31 +1,47 @@
 import './search-bar.css';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { getAllBreeds, getBreedsByName } from '../../actions';
+import { clearState, getAllBreeds, getBreedsByName } from '../../actions';
 
 export class SearchBar extends Component {
     
     constructor(props) {
         super(props);
         this.state = {
-            breed: ''
+            caller: '',
+            breed: '',
         }
     }
 
 
     handleChange(e) {
-        this.setState({ breed: e.target.value })
+        this.setState({ 
+            breed: e.target.value, 
+            caller: e.target.name 
+        });
+        console.log('handleChange');
+        console.log(this.state);
     };
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log('handleSubmit execution');
-        this.props.getAllBreeds( this.state.breed )
+        this.setState({
+            ...this.state,
+            caller: e.target.name
+        })
+        console.log('handleSubmit')
+        console.log(this.state)
     };
 
     componentDidUpdate( prevProps, prevState ) {
-        if (this.state.breed !== prevState.breed && this.state.breed !== '') {
-          this.props.getBreedsByName( this.state.breed );
+        console.log('search bar updated')
+        console.log(this.state)
+        if ( 
+            ( this.state.breed !== prevState.breed
+            || this.state.caller !== prevState.caller )
+            && this.state.breed !== '' 
+        ) {
+            this.props.getBreedsByName( this.state.breed, this.state.caller );
         }
     }
 
@@ -33,6 +49,7 @@ export class SearchBar extends Component {
     render() {
         return (
             <form 
+                name = 'form' 
                 className='search-container' 
                 onSubmit={ e => this.handleSubmit(e)}
             >
@@ -47,6 +64,7 @@ export class SearchBar extends Component {
                     className='button' 
                     type='submit'
                 />
+
             </form>
         )
     }
@@ -54,14 +72,15 @@ export class SearchBar extends Component {
 
 function mapStateToProps(state) {
     return {
-        searchedDogs: state.searchedBreeds
+        searchedBreeds: state.searchedBreeds
     }
 };
 
 function mapDispatchToProps(dispatch) {
     return {
         getAllBreeds: () => dispatch(getAllBreeds()),
-        getBreedsByName: breedName => dispatch(getBreedsByName(breedName))
+        getBreedsByName: ( breedName, target ) => dispatch(getBreedsByName( breedName, target )),
+        clearState: () => dispatch(clearState())
     }
 };
 

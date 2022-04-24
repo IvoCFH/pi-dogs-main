@@ -1,20 +1,24 @@
 import './breed.css';
-import { Component } from 'react';
+import { Component, } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
-export class Breed extends Component {
+
+export class BreedCard extends Component {
     constructor(props) {
         super(props);
-        this.state = {
-            breed: {}            
-        }
     }
     
     render() {
+        const { id, breed, weight, temper } = this.props
         return (
-            <div className='breedContainer'>
-                {this.props.breed}
-            </div>
+            <Link to={`/breed/${id}`}>
+                <div className='breedContainer'>
+                    Name: {breed} <br />
+                    Weight: {weight} <br />
+                    Temper: {temper}
+                </div>
+            </Link>
         )
     };
 }
@@ -27,4 +31,7 @@ function mapDispatchToProps(dispatch) {
 
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Breed);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(BreedCard);

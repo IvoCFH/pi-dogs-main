@@ -1,24 +1,42 @@
 const initialState = {
+    filteredBreeds: [],
     searchedBreeds: [],
     breedDetail: {}
 }
 
-function rootReducer(state = initialState, action) {
+// function rootReducer(state = initialState, action) {
+function rootReducer(state = initialState, { type, payload }) {
     console.log('root reducer:')
-    console.log(action.type)
-    if ( action.type === 'GET_ALL_BREEDS' || action.type === 'GET_BREEDS_BY_NAME' ) {
-        return {
-            ...state,
-            searchedBreeds: state.searchedBreeds.concat(action.payload)
+    console.log(type);
+    console.log(payload);
+    if ( type === 'GET_ALL_BREEDS' || type === 'GET_BREEDS_BY_NAME' ) {
+        if ( payload.target === 'breedName' ) {
+            return {
+                ...state,
+                searchedBreeds: payload.data
+            }    
+        }
+        if ( payload.target === 'form' ) {
+            return {
+                ...state,
+                filteredBreeds: payload.data
+            }
         }
     };
 
-    if ( action.type === 'GET_BREED_DETAIL' ) {
+    if ( type === 'GET_BREED_DETAIL' ) {
         return {
             ...state,
-            breedDetail: action.payload
+            breedDetail: payload.data
         }
     };
+
+    if ( type === 'CLEAR_STATE' ) {
+        return {
+            ...state,
+            filteredBreeds: []
+        }
+    }
 
     return state
 };

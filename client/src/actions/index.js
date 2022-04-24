@@ -1,5 +1,10 @@
+// CLEAN STATES REGISTERS
+export function clearState() {
+    return { type: 'CLEAR_STATE' }
+}
 
-// GET ALL BREEDS
+
+//GET ALL BREEDS
 export function getAllBreeds() {
     return function(dispatch) {
         return fetch('http://localhost:3001/dogs', { method: 'GET' } )
@@ -12,14 +17,15 @@ export function getAllBreeds() {
 }
 
 // GET BREEDS BY NAME
-export function getBreedsByName(breedName) {
+export function getBreedsByName( breedName, target ) {
     return function(dispatch) {
-        console.log('action breedName: ' + breedName)
         return fetch(`http://localhost:3001/dogs?name=${breedName}`, { method: 'GET' })
             .then( data => data.json())
             .then( json => {
-                console.log(json);
-                dispatch({ type: 'GET_BREEDS_BY_NAME', payload: json })
+                dispatch({ 
+                    type: 'GET_BREEDS_BY_NAME', 
+                    payload: { data: json, target: target }}
+                )
             })
     }
 }
@@ -27,10 +33,11 @@ export function getBreedsByName(breedName) {
 // GET BREED DETAIL
 export function getBreedDetail(breedId) {
     return function(dispatch) {
-        return fetch(`localhost:3001/dogs/${breedId}`, { method: 'GET' })
+        return fetch(`http://localhost:3001/dogs/${breedId}`, { method: 'GET' })
             .then( data => data.json())
             .then( json => {
-                dispatch({ type: 'GET_BREED_DETAIL', payload: json })
+                console.log(json);
+                dispatch({ type: 'GET_BREED_DETAIL', payload: {data: json} })
             });
     };
 };

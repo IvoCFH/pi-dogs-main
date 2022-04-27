@@ -1,0 +1,18 @@
+.listContainer {
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 60%;
+    min-height: 300px;
+    margin: 0;
+    padding: 0;
+    background-color: pink;
+}
+
+.noBreedsLoaded {
+    border: 1px solid black;
+    border-radius: 5px;
+    width: 60%;
+    min-height: 50%;
+    background-color: pink;
+    margin: 5% auto;
+}

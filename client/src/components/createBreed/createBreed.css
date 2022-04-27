@@ -1,0 +1,16 @@
+.input-container {
+    margin: 3% auto;
+    max-width: 50%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.text-container {
+    min-width: 70%;
+    min-height: 20px;
+}
+
+.submitButton {
+    width: 20%;
+    margin: 0 40%;
+}

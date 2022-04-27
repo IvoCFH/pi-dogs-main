@@ -11,7 +11,7 @@ export default class Login extends Component {
                 <div className='login-container'>
                 </div>
                 <img src={login_1} className="background-img" alt="login_1" />
-                <Link to={`/home`}>
+                <Link to={'/breeds'}>
                     <div className='banner'>
                         <h1>INGRESAR</h1>
                     </div>

@@ -5,14 +5,11 @@ import { Link } from 'react-router-dom';
 
 
 export class BreedCard extends Component {
-    constructor(props) {
-        super(props);
-    }
     
     render() {
         const { id, breed, weight, temper } = this.props
         return (
-            <Link to={`/breed/${id}`}>
+            <Link to={`/breeds/${id}`}>
                 <div className='breedContainer'>
                     Name: {breed} <br />
                     Weight: {weight} <br />

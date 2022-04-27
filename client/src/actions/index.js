@@ -44,8 +44,17 @@ export function getBreedDetail(breedId) {
 
 // CREATE BREED IN LOCAL DATABASE
 export function createBreed(breed) {
+    console.log(JSON.stringify(breed))
     return function(dispatch) {
-        fetch( 'localhost:3001/dogs', { method: 'POST' } )
+        fetch( 'http://localhost:3001/dogs', { 
+            method: 'POST',
+            body: JSON.stringify(breed),
+            mode: 'cors',
+            credentials: 'same-origin',
+            headers: {
+                'Content-Type': 'application/json'
+            }, 
+        })
             .then( data => data.json() )
             .then( json => {
                 dispatch({ type:'CREATE_BREED', payload: json });

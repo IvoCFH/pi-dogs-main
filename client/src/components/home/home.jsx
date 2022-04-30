@@ -4,11 +4,10 @@ import { connect } from 'react-redux';
 import SearchBar from '../search-bar/search-bar';
 import Filters from '../filters/filters';
 import BreedList from '../breedList/breedList';
+import NavBar from '../nav-bar/nav-bar';
 
 export class Home extends Component {
-    componentDidMount() {
-
-    };
+    
     
     render() {
         return (

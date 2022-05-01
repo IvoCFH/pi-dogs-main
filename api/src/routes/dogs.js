@@ -2,6 +2,8 @@ const { Router } = require('express');
 const router = Router();
 const { Dog, Temper, Op } = require('../db');
 const { generateId, checkTempers } = require('../utils/utils')
+const { DOGS_API_KEY } = process.env;
+const axios = require("axios")
 
 // GET dogs | dogs?name=''
 router.get('/', async function(req, res) {
@@ -14,16 +16,48 @@ router.get('/', async function(req, res) {
                 }
             }
         });
-        const newArrBreeds = Promise.all(queryBreeds.map(async elem => {
+        const newArrBreeds = await Promise.all(queryBreeds.map(async elem => {
             let temper = await elem.getTempers();
             return {
                 id: elem.id,
                 name: elem.name,
                 weight: elem. weight,
-                temper: temper.map(temper => temper.name)
+                temper: temper.map(temper => temper.name),
+                imgUrl: '',
+                external: false
             }
         }));
-        res.json(await newArrBreeds);
+        
+        let extBreeds = await axios(`https://api.thedogapi.com/v1/breeds/search?q=${req.query.name}&api_key=${DOGS_API_KEY}`)
+            .then( data => {return data.data})
+            
+        let newExtBreeds = await Promise.all(extBreeds.map( async elem => {
+            let imgUrl = await axios(`https://api.thedogapi.com/v1/images/${elem.reference_image_id}`)
+                .then( imgData => {return imgData.data.url})
+            return {
+                id: elem.id,
+                name: elem.name,
+                weight: elem.weight.metric,
+                temper: elem.temperament.split(', '),
+                imgUrl: imgUrl,
+                external: true
+            }
+        }));
+        console.log(newExtBreeds)
+        
+        res.json([...newArrBreeds, ...newExtBreeds])
+
+        // axios(`https://api.thedogapi.com/v1/breeds/search?q=${req.query.name}&api_key=${DOGS_API_KEY}`)
+        //     .then( data => {
+        //         let extBreeds = data.data[0];
+        //         console.log(extBreeds);
+        //         axios(`https://api.thedogapi.com/v1/images/${extBreeds.reference_image_id}`)
+        //             .then( imgData => {
+        //                 let image = imgData.data.url
+        //                 console.log(image);
+                        
+        //             })
+        //     })
     }
 
     // Si no entran parámetros por query...
@@ -37,30 +71,39 @@ router.get('/', async function(req, res) {
                 weight: elem. weight, 
                 temper: temper.map(temper => temper.name) 
             }
-            return breed;
+            return breed
         }));
-        res.json(await newArrBreeds);
+        
+        res.json(await newArrBreeds)
     };
 });
 
-// GET dogs/:idRaza
+// GET dogs/:idRaza?ext=true / false
 router.get('/:idRaza', async function(req, res) {
-    const breedDetail = await Dog.findByPk(req.params.idRaza);
-    if (!!breedDetail) {
-        let tempers = await breedDetail.getTempers();
-        let finalDetail = tempers.map(temper => temper.name);
-        res.json({ 
-            name: breedDetail.name,
-            temper: finalDetail,
-            height: breedDetail.height,
-            weight: breedDetail.weight,
-            maxAge: breedDetail.maxAge
-        });
+    // el perro elegido es de la api externa
+    if (req.query.ext) {
+        let extBreedDetail = await axios(`https://api.thedogapi.com/v1/breeds/${req.params.idRaza}?api_key=${DOGS_API_KEY}`);
+        console.log(extBreedDetail)
     }
+    // el perro elegido es de la base de datos
     else {
-        res.status(404).json({
-            error: 'Dog ID requested not found'
-        }) 
+        const breedDetail = await Dog.findByPk(req.params.idRaza);
+        if (!!breedDetail) {
+            let tempers = await breedDetail.getTempers();
+            let finalDetail = tempers.map(temper => temper.name);
+            res.json({ 
+                name: breedDetail.name,
+                temper: finalDetail,
+                height: breedDetail.height,
+                weight: breedDetail.weight,
+                maxAge: breedDetail.maxAge
+            });
+        }
+        else {
+            res.status(404).json({
+                error: 'Dog ID requested not found'
+            }) 
+        }
     }
 });
 

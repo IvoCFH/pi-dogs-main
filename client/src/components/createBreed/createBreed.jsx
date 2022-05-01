@@ -2,6 +2,7 @@ import './createBreed.css';
 import React, { Component } from 'react';
 import { createBreed } from '../../actions';
 import { connect } from 'react-redux';
+import { validateFormInputs } from './form-validations';
 
 export class CreateBreed extends Component {
 
@@ -17,11 +18,20 @@ export class CreateBreed extends Component {
                 maxAge: '',
                 tempers: []
             },
-            error: {}
+            error: {
+                name: ''
+            }
         }
     }
 
-    handleChange( event ) {
+    async handleChange( event ) {
+        if (this.state.error.hasOwnProperty( event.target.name )) await this.setState({
+            ...this.state,
+            error: {
+                ...this.state.error, 
+                [event.target.name]: ''
+            }
+        })
         if ( event.target.name === 'tempers' ) {
             let newTempers = event.target.value.split(',').map( temper => {
                 return temper.trim()
@@ -29,7 +39,7 @@ export class CreateBreed extends Component {
             if ( newTempers[newTempers.length - 1] === '' ) {
                 newTempers.reverse().shift();
                 newTempers.reverse();
-            }
+            } // remueve el último elemento que queda vacio en el array por culpa del split
             this.setState({
                 ...this.state,
                 breed: {
@@ -37,7 +47,7 @@ export class CreateBreed extends Component {
                     [event.target.name]: newTempers
                 }
             })    
-        }
+        } // agrega de manera correcta los tempers ingresados, separados por coma
         else {
             this.setState({
                 ...this.state,
@@ -46,94 +56,7 @@ export class CreateBreed extends Component {
                     [event.target.name]: event.target.value
                 }
             })
-        }
-    }
-
-// Sets the error state of the component. If name is valid returns true, if it's not, returns
-// false.
-    validateName() {
-        if ( this.state.breed.name === '' ) {
-            this.setState({
-                ...this.state,
-                error: {
-                    ...this.state.error,
-                    name: 'Breed name is missing'
-                }
-            })
-            return false
-        } 
-        else {
-            this.setState({
-                ...this.state,
-                error: {
-                    ...this.state.error,
-                    name: ''
-                }
-            })
-            return true
-        }
-    }
-
-// Sets the error state of the component. If height is valid returns true, if it's not, returns
-// false.
-    validateHeight() {
-        if ( Number(this.state.maxHeight) < Number(this.state.minHeight) ) {
-            this.setState({
-                ...this.state,
-                error: {
-                    ...this.state.error,
-                    height: 'Max height cannot be lesser than min height'
-                }
-            })
-            return false
-        }
-        else {
-            this.setState({
-                ...this.state,
-                error: {
-                    ...this.state.error,
-                    height: ''
-                }
-            })
-            return true
-        }
-    }
-
-// Sets the error state of the component. If weight is valid returns true, if it's not, returns
-// false.
-    validateWeight() {
-        if ( Number(this.state.maxWeight) < Number(this.state.minWeight) ) {
-            this.setState({
-                ...this.state,
-                error: {
-                    ...this.state.error,
-                    height: 'Max weight cannot be lesser than min weight'
-                }
-            })
-            return false
-        }
-        else {
-            this.setState({
-                ...this.state,
-                error: {
-                    ...this.state.error,
-                    height: ''
-                }
-            })
-            return true
-        }
-    }
-    
-// Returns true or false depending on the result of executing all validations
-    validations(validations) {
-        if ( validations.length !== 0 ) {
-            let valReg = [];
-            for ( let x=0; x < validations.length; x++ ) {
-                valReg.push(validations[x]());
-            }
-            if ( valReg.filter(reg => reg === false).length > 0 ) return false 
-            else return true
-        }
+        } // agrega la propiedad que estamos ingresando por el form
     }
 
     toBreedCte({ name, minHeight, maxHeight, minWeight, maxWeight, maxAge, tempers }) {
@@ -147,16 +70,30 @@ export class CreateBreed extends Component {
     }
     
     create(e) {
-        e.preventDefault();
-        if ( this.validations([
-                this.validateName.bind(this),
-                this.validateHeight.bind(this),
-                this.validateWeight.bind(this)
-            ])
-        ) {
-            console.log(this.state.breed);
-            console.log(this.toBreedCte(this.state.breed));
-            this.props.createBreed(this.toBreedCte(this.state.breed));
+        e.preventDefault();       
+        let valError = validateFormInputs(this.state.breed, [
+            { param1: 'name', param2: 3, val: [ 'min-length' ]},
+            { param1: 'minHeight', val: [ 'empty' ]},
+            { param1: 'minWeight', val: [ 'empty' ]},
+            { param1: 'maxHeight', param2: 'minHeight', val: [ 'empty', 'higher' ]},
+            { param1: 'maxWeight', param2: 'minWeight', val: [ 'empty', 'higher' ]},
+            { param1: 'maxAge', val: [ 'empty' ]},
+            { param1: 'tempers', val: [ 'empty' ]}
+        ]);
+        let invalid = false;
+        for ( let error in valError ) {
+            if (valError[error] !== '') {
+                invalid = true;
+                break
+            }
+        }
+        if (!invalid) this.props.createBreed(this.toBreedCte(this.state.breed))
+        else {
+            console.log('invalid Inputs')
+            this.setState({
+                ...this.state,
+                error: valError
+            })
         }
     }
 
@@ -164,75 +101,96 @@ export class CreateBreed extends Component {
         return(
             <>
                 <form onSubmit={ e => this.create(e) }>
-                    <div className='input-container'>
-                        <label> Breed Name </label>
-                        <input 
-                            className='text-container'
-                            type="text" 
-                            name='name' 
-                            placeholder=' Breed name'
-                            onChange={ e => this.handleChange(e) }
-                        />
+                    <div className='container'>
+                        <div className='input-container'>
+                            <label> Breed Name </label>
+                            <input 
+                                className='text-container'
+                                type="text" 
+                                name='name' 
+                                placeholder=' Breed name'
+                                onChange={ e => this.handleChange(e) }
+                            />
+                        </div>
+                        {this.state.error.name && <p className="danger">{this.state.error.name}</p>}
                     </div>
-                    <div className='input-container'>
-                        <label> Min. Height </label>
-                        <input 
-                            className='text-container'
-                            type="text" 
-                            name='minHeight' 
-                            placeholder=' Breed estimated minimum height'
-                            onChange={ e => this.handleChange(e) }
-                        />
+                    <div className='container'>
+                        <div className='input-container'>
+                            <label> Min. Height </label>
+                            <input 
+                                className='text-container'
+                                type="text" 
+                                name='minHeight' 
+                                placeholder=' Breed estimated minimum height'
+                                onChange={ e => this.handleChange(e) }
+                            />
+                        </div>
+                        {this.state.error.minHeight && <p className="danger">{this.state.error.minHeight}</p>}
                     </div>
-                    <div className='input-container'>
-                        <label> Max. Height </label>
-                        <input 
-                            className='text-container'
-                            type="text" 
-                            name='maxHeight' 
-                            placeholder=' Breed estimated maximum height'
-                            onChange={ e => this.handleChange(e) }
-                        />
+                    <div className='container'>
+                        <div className='input-container'>
+                            <label> Max. Height </label>
+                            <input 
+                                className='text-container'
+                                type="text" 
+                                name='maxHeight' 
+                                placeholder=' Breed estimated maximum height'
+                                onChange={ e => this.handleChange(e) }
+                            />
+                        </div>
+                        {this.state.error.maxHeight && <p className="danger">{this.state.error.maxHeight}</p>}
                     </div>
-                    <div className='input-container'>
-                        <label> Min. Weight </label>
-                        <input 
-                            className='text-container'
-                            type="text" 
-                            name='minWeight' 
-                            placeholder=' Breed estimated minimum weight'
-                            onChange={ e => this.handleChange(e) }
-                        />
+                    <div className='container'>
+                        <div className='input-container'>
+                            <label> Min. Weight </label>
+                            <input 
+                                className='text-container'
+                                type="text" 
+                                name='minWeight' 
+                                placeholder=' Breed estimated minimum weight'
+                                onChange={ e => this.handleChange(e) }
+                            />
+                        </div>
+                        {this.state.error.minWeight && <p className="danger">{this.state.error.minWeight}</p>}
                     </div>
-                    <div className='input-container'>
-                        <label> Max. Weight </label>
-                        <input 
-                            className='text-container'
-                            type="text" 
-                            name='maxWeight' 
-                            placeholder=' Breed estimated maximum weight'
-                            onChange={ e => this.handleChange(e) }
-                        />
+                    <div className='container'>
+                        <div className='input-container'>
+                            <label> Max. Weight </label>
+                            <input 
+                                className='text-container'
+                                type="text" 
+                                name='maxWeight' 
+                                placeholder=' Breed estimated maximum weight'
+                                onChange={ e => this.handleChange(e) }
+                            />
+                        </div>
+                        {this.state.error.maxWeight && <p className="danger">{this.state.error.maxWeight}</p>}
                     </div>
-                    <div className='input-container'>
-                        <label> Maximum Age </label>
-                        <input 
-                            className='text-container'
-                            type="text" 
-                            name='maxAge' 
-                            placeholder=' Breed estimated maximum age'
-                            onChange={ e => this.handleChange(e) }
-                        />
+                    <div className='container'>
+                        <div className='input-container'>
+                            <label> Maximum Age </label>
+                            <input 
+                                className='text-container'
+                                type="text" 
+                                name='maxAge' 
+                                placeholder=' Breed estimated maximum age'
+                                onChange={ e => this.handleChange(e) }
+                            />
+                        </div>
+                        {this.state.error.maxAge && <p className="danger">{this.state.error.maxAge}</p>}
                     </div>
-                    <div className='input-container'>
-                        <label> Temperaments </label>
-                        <input 
-                            className='text-container'
-                            type="text" 
-                            name='tempers' 
-                            placeholder=' Common temperaments of this breed (separated by comma)'
-                            onChange={ e => this.handleChange(e) }
-                        />
+                    <div className='container'>
+                        <div className='input-container'>
+                            <label> Temperaments </label>
+                            <input 
+                                className='text-container'
+                                type="text" 
+                                name='tempers' 
+                                placeholder=' Common temperaments of this breed (separated by comma)'
+                                onChange={ e => this.handleChange(e) }
+                            />
+                        </div>
+                        {this.state.error.tempers && <p className="danger">{this.state.error.tempers}</p>}
                     </div>
                     <input className="submitButton" type="submit" />
                 </form>

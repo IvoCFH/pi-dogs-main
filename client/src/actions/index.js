@@ -11,8 +11,9 @@ export function getAllBreeds() {
             .then( data => data.json())
             .then( json => {
                 console.log(json);
-                dispatch({ type: 'GET_ALL_BREEDS', payload: json })
-            })
+                dispatch({ type: 'GET_ALL_BREEDS', payload: json });
+                }
+            )            
     }
 }
 
@@ -22,11 +23,13 @@ export function getBreedsByName( breedName, target ) {
         return fetch(`http://localhost:3001/dogs?name=${breedName}`, { method: 'GET' })
             .then( data => data.json())
             .then( json => {
+                console.log(json)
                 dispatch({ 
                     type: 'GET_BREEDS_BY_NAME', 
-                    payload: { data: json, target: target }}
-                )
-            })
+                    payload: { data: json, target: target }
+                })
+            }
+        )       
     }
 }
 

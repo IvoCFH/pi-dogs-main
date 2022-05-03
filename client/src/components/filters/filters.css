@@ -1,9 +1,16 @@
 .filtersContainer {
-    width: 30%;
-    min-height: 300px;
-    border: 1px solid black;
-    border-radius: 5px;
+    width: 20%;
+    min-height: 400px;
     padding: 1.5%;
-    background-color: blueviolet;
+    background-color: rgba(137, 43, 226, 0.366);
+}
+
+.filtersForm {
     display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.applyBtn {
+    margin: 10px auto;
 }

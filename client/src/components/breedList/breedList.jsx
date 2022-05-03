@@ -3,27 +3,63 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { BreedCard } from '../breed/breed';
 import { getBreedDetail } from '../../actions';
+import searchIcon from '../../imgs/search-icon.png';
 
 export class BreedList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            // render: false
+            page: 0
         }
     }
-    
 
-    componentDidUpdate( prevProps, prevState ) {
-        // console.log('breedList updated');
-        // console.log(prevProps.filteredBreeds);
-        // console.log(this.props.filteredBreeds);
+    changePage(e) {
+        console.log(e.target.name)
+        if (e.target.name === 'next' && (this.state.page * 8) + 8 <= this.props.filteredBreeds.length) {
+            this.setState({
+                ...this.state,
+                page: this.state.page + 1
+            })
+        }
+        else if (e.target.name === 'prev' && this.state.page !== 0) {
+            this.setState({
+                ...this.state,
+                page: this.state.page - 1
+            })
+        }
+    };
+
+    orderView(arr) {
+        if (arr.length > 8) {
+            console.log(this.state.page);
+            return arr.slice(this.state.page * 8, (this.state.page * 8) + 8)
+        }
+        else return arr
     }
 
     render() {
         if (this.props.filteredBreeds.length !== 0) {
+            let orderedView = this.orderView(this.props.filteredBreeds)
             return (
                 <div className='listContainer'>
-                    {this.props.filteredBreeds.map( breed => {
+                    { this.props.filteredBreeds.length > 8 &&
+                        <div className='pages'>
+                            <button 
+                                name='prev'
+                                onClick={ e => this.changePage(e) }
+                            >
+                                Previous
+                            </button>
+                            {this.state.page + 1}
+                            <button 
+                                name='next'
+                                onClick={ e => this.changePage(e) }
+                            >
+                                Next
+                            </button>
+                        </div>
+                    }
+                    {orderedView.map( breed => {
                         let temper = breed.temper.join(', ');
                         return (
                             <BreedCard 
@@ -32,6 +68,7 @@ export class BreedList extends Component {
                                 breed = { breed.name }
                                 weight = { breed.weight }
                                 temper = { temper }
+                                ext = { breed.external }
                             />
                         )
                     })}
@@ -41,8 +78,9 @@ export class BreedList extends Component {
         else {
             return (
                 <div className='listContainer'>
-                    <div className='noBreedsLoaded'>
-                        Search for your favourite breed!
+                    <div className='noBreedsLoaded'>                        
+                        <p>Search for your favourite breed!</p><br/>
+                        <img src={searchIcon} alt="search-icon" width="200px" />
                     </div>
                 </div>
             )

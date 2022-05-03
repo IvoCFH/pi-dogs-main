@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { createBreed } from '../../actions';
 import { connect } from 'react-redux';
 import { validateFormInputs } from './form-validations';
+import { Redirect } from 'react-router-dom';
 
 export class CreateBreed extends Component {
 
@@ -20,7 +21,8 @@ export class CreateBreed extends Component {
             },
             error: {
                 name: ''
-            }
+            },
+            created: false
         }
     }
 
@@ -69,7 +71,7 @@ export class CreateBreed extends Component {
         }
     }
     
-    create(e) {
+    async create(e) {
         e.preventDefault();       
         let valError = validateFormInputs(this.state.breed, [
             { param1: 'name', param2: 3, val: [ 'min-length' ]},
@@ -87,7 +89,13 @@ export class CreateBreed extends Component {
                 break
             }
         }
-        if (!invalid) this.props.createBreed(this.toBreedCte(this.state.breed))
+        if (!invalid) {
+            await this.props.createBreed(this.toBreedCte(this.state.breed))
+            this.setState({
+                ...this.state,
+                created: true
+            })
+        }
         else {
             console.log('invalid Inputs')
             this.setState({
@@ -100,6 +108,7 @@ export class CreateBreed extends Component {
     render() {
         return(
             <>
+                { this.state.created && <Redirect to="/breeds"/>}
                 <form onSubmit={ e => this.create(e) }>
                     <div className='container'>
                         <div className='input-container'>

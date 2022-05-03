@@ -1,6 +1,6 @@
 const initialState = {
     filteredBreeds: [],
-    searchedBreeds: [],
+    searchedBreed: '',
     breedDetail: {}
 }
 
@@ -10,18 +10,19 @@ function rootReducer(state = initialState, { type, payload }) {
     console.log(type);
     console.log(payload);
     if ( type === 'GET_ALL_BREEDS' || type === 'GET_BREEDS_BY_NAME' ) {
-        if ( payload.target === 'breedName' ) {
+        // if ( payload.target === 'breedName' ) {
+        //     return {
+        //         ...state,
+        //         searchedBreeds: payload.data
+        //     }    
+        // }
+        // if ( payload.target === 'form' ) {
             return {
                 ...state,
-                searchedBreeds: payload.data
-            }    
-        }
-        if ( payload.target === 'form' ) {
-            return {
-                ...state,
+                searchedBreed: payload.searchedBreed,
                 filteredBreeds: payload.data
             }
-        }
+        // }
     };
 
     if ( type === 'GET_BREED_DETAIL' ) {

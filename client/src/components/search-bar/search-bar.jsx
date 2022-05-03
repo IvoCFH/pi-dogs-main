@@ -8,8 +8,7 @@ export class SearchBar extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            caller: '',
-            breed: '',
+            breed: ''
         }
     }
 
@@ -17,7 +16,6 @@ export class SearchBar extends Component {
     handleChange(e) {
         this.setState({ 
             breed: e.target.value, 
-            caller: e.target.name 
         });
         console.log('handleChange');
         console.log(this.state);
@@ -25,25 +23,21 @@ export class SearchBar extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        this.setState({
-            ...this.state,
-            caller: e.target.name
-        })
-        console.log('handleSubmit')
-        console.log(this.state)
+        console.log('submited');
+        console.log(this.state);
+        this.props.getBreedsByName( this.state.breed );
     };
 
-    componentDidUpdate( prevProps, prevState ) {
-        console.log('search bar updated')
-        console.log(this.state)
-        if ( 
-            ( this.state.breed !== prevState.breed
-            || this.state.caller !== prevState.caller )
-            && this.state.breed !== '' 
-        ) {
-            this.props.getBreedsByName( this.state.breed, this.state.caller );
-        }
-    }
+    // // Si se hace un update en el componente (cambio de estado) corroboramos que el estado actual sea diferente
+    // // del estado previo. Si este es diferente, entonces se despacha la accion de GET Breeds 
+    // componentDidUpdate( prevProps, prevState ) {
+    //     console.log('search bar updated')
+    //     console.log(this.state)
+    //     // if ( this.state.breed !== prevState.breed && this.state.breed !== '' ) {
+    //     if (this.state.breed !== '') {
+    //         this.props.getBreedsByName( this.state.breed );
+    //     }
+    // }
 
 
     render() {
@@ -79,7 +73,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         getAllBreeds: () => dispatch(getAllBreeds()),
-        getBreedsByName: ( breedName, target ) => dispatch(getBreedsByName( breedName, target )),
+        getBreedsByName: breedName => dispatch(getBreedsByName( breedName )),
         clearState: () => dispatch(clearState())
     }
 };

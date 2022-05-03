@@ -1,7 +1,7 @@
 import './login.css';
 import { Component } from "react";
 import { Link } from 'react-router-dom';
-import login_1 from '../../imgs/login/login_1.jpg';
+import login_1 from '../../imgs/login_1.jpg';
 
 
 export default class Login extends Component {

@@ -1,18 +1,30 @@
 .listContainer {
-    border: 1px solid black;
-    border-radius: 5px;
-    width: 60%;
+    /* border: 1px solid black; */
+    /* border-radius: 5px; */
+    width: 100%;
     min-height: 300px;
     margin: 0;
     padding: 0;
-    background-color: pink;
+    overflow: hidden;
+    background-color: rgba(165, 42, 42, 0.686);
 }
 
 .noBreedsLoaded {
-    border: 1px solid black;
-    border-radius: 5px;
     width: 60%;
-    min-height: 50%;
-    background-color: pink;
-    margin: 5% auto;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+}
+
+.pages {
+    display: flex;
+    margin: 0;
+    height: 30px;
+    flex-direction: row;
+    justify-content: space-around;
+    border-bottom: 1px solid grey;
+    align-items: center;
+    background-color: rgb(253, 253, 131);
 }

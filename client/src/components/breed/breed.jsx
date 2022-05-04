@@ -2,6 +2,7 @@ import './breed.css';
 import { Component, } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import dogIcon from '../../imgs/dog-icon.png'
 
 
 export class BreedCard extends Component {
@@ -9,7 +10,7 @@ export class BreedCard extends Component {
         const { id, breed, weight, temper, ext, imgUrl } = this.props
         return (
             <Link to={`/breeds/${id}?ext=${ext}`} className='breed-link'>
-                <img className="breed-img" src={imgUrl} />
+                <img className="breed-img" src={ imgUrl !== '' ? imgUrl : dogIcon} />
                 <div className='breed-container'>
                     Name: {breed} |
                     Weight: {weight} <br />

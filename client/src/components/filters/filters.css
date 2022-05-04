@@ -3,6 +3,7 @@
     min-height: 400px;
     padding: 1.5%;
     background-color: rgba(137, 43, 226, 0.366);
+    min-width: 150px;
 }
 
 .filtersForm {

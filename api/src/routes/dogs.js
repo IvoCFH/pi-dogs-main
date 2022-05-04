@@ -12,21 +12,26 @@ const axios = require("axios");
 // filter = temper
 router.get('/', async function(req, res) {
     let { name, prop, order, temper, getData } = req.query;
-    // Si hay un parametro por query /dogs?name=...
-    if(name) {
         // Declaro el array total
         let totalBreeds = [];
 
         // Si no se especifica ext o ext = false, hago el GET a la base de datos.
         // Lo obtenido se inserta en totalBreeds
         if ( !getData || getData === 'both' || getData === 'local' ) {
-            // Consulta a la base de datos por todas las razas que contengan el string proporcionado
-            const queryBreeds = await Dog.findAll({
-                where: {
-                    name: {
-                        [Op.startsWith]: name
+            let dbQuery = {}
+            if ( name ) {
+                dbQuery = {
+                    where: {
+                        name: {
+                            [Op.startsWith]: name
+                        }
                     }
                 }
+            }
+
+            // Consulta a la base de datos por todas las razas que contengan el string proporcionado
+            const queryBreeds = await Dog.findAll({
+                
             });
             // Arma el array de breed LOCALES.
             const newArrBreeds = await Promise.all(queryBreeds.map(async elem => {
@@ -46,8 +51,12 @@ router.get('/', async function(req, res) {
         // Si no se especifica ext o ext = true, hago el GET a la API externa
         // Lo obtenido se inserta en totalBreeds
         if ( !getData || getData === 'both' || getData === 'external' ) {
+            let url = `https://api.thedogapi.com/v1/breeds`
+            if ( name ) url += `/search?q=${name}&api_key=${DOGS_API_KEY}`
+            else url += `?api_key=${DOGS_API_KEY}`
+            console.log(url)
             // Consulta a la api externa por todas las razas que contengan el string proporcionado
-            const extBreeds = await axios(`https://api.thedogapi.com/v1/breeds/search?q=${name}&api_key=${DOGS_API_KEY}`)
+            const extBreeds = await axios(url)
                 .then( data => {
                     return data.data
                 })
@@ -88,28 +97,6 @@ router.get('/', async function(req, res) {
         }
 
         res.json(totalBreeds)
-        
-    }
-    else {
-        res.json({})
-    }
-
-    // Si no entran parámetros por query pide todos... - NO SE USA POR AHORA
-    // else {
-    //     const allBreeds = await Dog.findAll();          
-    //     const newArrBreeds = await Promise.all(allBreeds.map(async elem => {
-    //         let temper = await elem.getTempers();
-    //         let breed = {
-    //             id: elem.id,
-    //             name: elem.name,
-    //             weight: elem. weight, 
-    //             temper: temper.map(temper => temper.name) 
-    //         }
-    //         return breed
-    //     }));
-        
-    //     res.json(await newArrBreeds)
-    // };
 });
 
 // GET dogs/:idRaza?ext=true / false

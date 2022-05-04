@@ -13,7 +13,7 @@ async function generateId(model) {
         return id
     }
     catch (e) {
-        console.log(e)
+        console.log('error en generateId')
     }
 };
 
@@ -21,7 +21,7 @@ async function generateId(model) {
 // Si alguno no existiera se crea en la base de datos como un temperamento nuevo.
 async function checkTempers(tempNames) {
     // Incializo un array que contendrá los ids de temperamentos una vez localizados/creados
-    let temperIds = []; 
+    let temperIds = [];
     try {
         // Solo ejecutamos si el argumento no es undef o null y si el array no es vacío.
         if (!!tempNames && tempNames.length > 0) {
@@ -44,12 +44,10 @@ async function checkTempers(tempNames) {
             }
             // devolvemos array con ids,
             return temperIds;
-        };
+        }
     }
     catch (e) {
-        console.log(e);
-        // en caso de error devolvemos vacío.
-        return [];
+        throw new Error('could not insert temper into DB')        
     };
 };
 

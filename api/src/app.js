@@ -3,10 +3,11 @@ const cookieParser = require('cookie-parser');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const routes = require('./routes/index.js');
-
 require('./db.js');
-
 const server = express();
+const axios = require('axios')
+
+
 
 server.name = 'API';
 
@@ -33,5 +34,8 @@ server.use((err, req, res, next) => { // eslint-disable-line no-unused-vars
   console.error(err);
   res.status(status).send(message);
 });
+
+
+
 
 module.exports = server;

@@ -9,6 +9,7 @@ export default class NavBar extends Component {
             <div className='nav-bar'>
                 <div className='link-container'>
                     <Link to='/breeds' className='nav-link'> <p className='linkText'>Breeds</p></Link>
+                    <Link to='/temperaments' className='nav-link'> <p className='linkText'>Temperaments</p></Link>
                     <Link to='/create-breed' className='nav-link'> <p className='linkText'>Create</p></Link>
                 </div>
             </div>

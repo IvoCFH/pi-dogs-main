@@ -29,7 +29,7 @@ export function getBreedsByName( breedName, options ) {
         if (getData) url += `&getData=${getData}`;
     }
     return function(dispatch) {
-        // ESTO ES PARA ANULAR LA SOLICITUD QUE SE HACE CON CADA TYPEO EN LA BARRA DE BUSQUEDA
+        // ESTO ES PARA ANULAR LA SOLICITUD QUE SE HACE CON CADA TiPEO EN LA BARRA DE BUSQUEDA
         // if ( target === 'form' ) {
             return fetch(url, { method: 'GET' })
                 .then( data => data.json())

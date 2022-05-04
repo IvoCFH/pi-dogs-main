@@ -2,7 +2,7 @@ import './breedList.css';
 import { Component } from 'react';
 import { connect } from 'react-redux';
 import { BreedCard } from '../breed/breed';
-import { getBreedDetail } from '../../actions';
+// import { getBreedDetail } from '../../actions';
 import searchIcon from '../../imgs/search-icon.png';
 
 export class BreedList extends Component {
@@ -69,6 +69,7 @@ export class BreedList extends Component {
                                 weight = { breed.weight }
                                 temper = { temper }
                                 ext = { breed.external }
+                                imgUrl = { breed.imgUrl }
                             />
                         )
                     })}
@@ -97,7 +98,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        getBreedDetail: breedName => dispatch(getBreedDetail(breedName))
+        // getBreedDetail: breedName => dispatch(getBreedDetail(breedName))
     }
 };
 

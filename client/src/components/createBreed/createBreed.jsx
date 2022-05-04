@@ -74,7 +74,7 @@ export class CreateBreed extends Component {
     async create(e) {
         e.preventDefault();       
         let valError = validateFormInputs(this.state.breed, [
-            { param1: 'name', param2: 3, val: [ 'min-length' ]},
+            { param1: 'name', param2: 3, val: [ 'min-length', 'not-nums', 'not-symbols']},
             { param1: 'minHeight', val: [ 'empty' ]},
             { param1: 'minWeight', val: [ 'empty' ]},
             { param1: 'maxHeight', param2: 'minHeight', val: [ 'empty', 'higher' ]},
@@ -90,7 +90,7 @@ export class CreateBreed extends Component {
             }
         }
         if (!invalid) {
-            await this.props.createBreed(this.toBreedCte(this.state.breed))
+            this.props.createBreed(this.toBreedCte(this.state.breed))
             this.setState({
                 ...this.state,
                 created: true
@@ -128,7 +128,8 @@ export class CreateBreed extends Component {
                             <label> Min. Height </label>
                             <input 
                                 className='text-container'
-                                type="text" 
+                                type="number"
+                                min="0" 
                                 name='minHeight' 
                                 placeholder=' Breed estimated minimum height'
                                 onChange={ e => this.handleChange(e) }
@@ -141,7 +142,8 @@ export class CreateBreed extends Component {
                             <label> Max. Height </label>
                             <input 
                                 className='text-container'
-                                type="text" 
+                                type="number"
+                                min="0" 
                                 name='maxHeight' 
                                 placeholder=' Breed estimated maximum height'
                                 onChange={ e => this.handleChange(e) }
@@ -154,7 +156,8 @@ export class CreateBreed extends Component {
                             <label> Min. Weight </label>
                             <input 
                                 className='text-container'
-                                type="text" 
+                                type="number"
+                                min="0" 
                                 name='minWeight' 
                                 placeholder=' Breed estimated minimum weight'
                                 onChange={ e => this.handleChange(e) }
@@ -167,7 +170,8 @@ export class CreateBreed extends Component {
                             <label> Max. Weight </label>
                             <input 
                                 className='text-container'
-                                type="text" 
+                                type="number"
+                                min="0" 
                                 name='maxWeight' 
                                 placeholder=' Breed estimated maximum weight'
                                 onChange={ e => this.handleChange(e) }
@@ -180,7 +184,8 @@ export class CreateBreed extends Component {
                             <label> Maximum Age </label>
                             <input 
                                 className='text-container'
-                                type="text" 
+                                type="number"
+                                min="0" 
                                 name='maxAge' 
                                 placeholder=' Breed estimated maximum age'
                                 onChange={ e => this.handleChange(e) }

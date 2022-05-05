@@ -92,10 +92,23 @@ router.get('/', async function(req, res) {
 
         // Si el array totalBreeds contiene algo:
         if ( totalBreeds.length > 0 ) {
-            // if ( temper ) totalBreeds = totalBreeds.filter( breed => breed.temper );
+
+            // Primero, si ingresa temperamento por query aplica filtro de temperamento
+            if ( temper ) {
+                totalBreeds = totalBreeds.filter( breed => {
+                    if (breed.temper.length > 0) {
+                        for ( let x=0; x < breed.temper.length; x++ ) {
+                            if ( breed.temper[x] === temper ) return true
+                        }
+                    }
+                })
+            };
+
+            // segundo, si ingresan parametros de ordenamiento se aplica el quick sort sobre el array.
             if ( order ) totalBreeds = quickSort(totalBreeds, prop, order);
         }
 
+        // Devuvelve el array completo (contiene informacion local (DB) y externa (Dogs API)) con filtros y ordenamiento de elementos aplicados.
         res.json(totalBreeds)
 });
 

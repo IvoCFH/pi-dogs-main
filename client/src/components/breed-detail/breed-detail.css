@@ -1,0 +1,17 @@
+.breed-detail-container {
+    /* border: 1px solid black; */
+    width: fit-content;
+    margin: 0 auto;
+}
+
+#breed-title {
+    text-align: center;
+}
+
+.breed-picture {
+    border: 1px solid black;
+    margin: 0 auto;
+    width: 400px;
+    /* text-align: center; */
+    display: block;
+}

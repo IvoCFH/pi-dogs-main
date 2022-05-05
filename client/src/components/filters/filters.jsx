@@ -1,7 +1,7 @@
 import './filters.css';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { getBreedsByName } from '../../actions';
+import { getAllBreeds, getBreedsByName } from '../../actions';
 
 export class Filters extends Component {
     
@@ -38,30 +38,26 @@ export class Filters extends Component {
         }
     }
 
+    handleTemper(e) {
+        console.log(e.target.name)
+        console.log(e.target.id)
+        if ( this.state.temper !== e.target.value ) {
+            this.setState({
+                ...this.state,
+                temper: e.target.value
+            })
+        }
+    }
+
 
     handleSubmit(e) {
         e.preventDefault();
+        console.log('submit')
         if ( this.props.searchedBreed ) {
             this.props.getBreedsByName(this.props.searchedBreed, this.state)
-            
-            // if ( this.state.order === 'a-z' || this.state.order === 'z-a' ) {
-            //     this.props.getBreedsByName( 
-            //         this.props.searchedBreed, 
-            //         {   
-            //             prop: 'name',
-            //             order: this.state.order,                       
-            //         }
-            //     );
-            // }
-            // else if ( this.state.order === 'min-max' || this.state.order === 'max-min' ) {
-            //     this.props.getBreedsByName( 
-            //         this.props.searchedBreed, 
-            //         {   
-            //             prop: 'weight',
-            //             order: this.state.order 
-            //         }
-            //     );
-            // }
+        }
+        else {
+            this.props.getAllBreeds(this.state);
         }
     }
 
@@ -153,12 +149,27 @@ export class Filters extends Component {
                                 <label>External</label>
                             </div>
                     </fieldset>
+                    <fieldset>
+                        <legend>Temperament</legend>
+                        <div>
+                            <input 
+                                className='tempFilter'
+                                type="text" 
+                                id="temper" 
+                                name="temper" 
+                                placeholder='Temperament'
+                                onChange={ e => this.handleTemper(e) }
+                            />
+                        </div>
+                    </fieldset>
+                    
                     <input 
                         type="submit" 
                         value='Apply Filters' 
                         className='applyBtn'
                         onClick={ e => this.handleSubmit(e) }
                     />
+
                 </form>
             </div>
         )
@@ -174,7 +185,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        getBreedsByName: (breed, options) => dispatch(getBreedsByName(breed, options))
+        getBreedsByName: (breed, options) => dispatch(getBreedsByName(breed, options)),
+        getAllBreeds: () => dispatch(getAllBreeds())
     }
 };
 

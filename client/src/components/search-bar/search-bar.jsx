@@ -1,44 +1,22 @@
 import './search-bar.css';
 import { Component } from 'react';
 import { connect } from 'react-redux';
-import { clearState, getAllBreeds, getBreedsByName } from '../../actions';
+import { getAllBreeds, getBreedsByName, setBreedName } from '../../actions';
 
 export class SearchBar extends Component {
     
-    constructor(props) {
-        super(props);
-        this.state = {
-            breed: ''
-        }
-    }
-
-
     handleChange(e) {
-        this.setState({ 
-            breed: e.target.value, 
-        });
         console.log('handleChange');
-        console.log(this.state);
+        this.props.setBreedName(e.target.value)
     };
 
     handleSubmit(e) {
         e.preventDefault();
         console.log('submited');
-        console.log(this.state);
-        this.props.getBreedsByName( this.state.breed );
+        if ( this.props.searchedBreed !== '' ) this.props.getBreedsByName( this.props.searchedBreed );
+        else this.props.getAllBreeds();
+        
     };
-
-    // // Si se hace un update en el componente (cambio de estado) corroboramos que el estado actual sea diferente
-    // // del estado previo. Si este es diferente, entonces se despacha la accion de GET Breeds 
-    // componentDidUpdate( prevProps, prevState ) {
-    //     console.log('search bar updated')
-    //     console.log(this.state)
-    //     // if ( this.state.breed !== prevState.breed && this.state.breed !== '' ) {
-    //     if (this.state.breed !== '') {
-    //         this.props.getBreedsByName( this.state.breed );
-    //     }
-    // }
-
 
     render() {
         return (
@@ -55,7 +33,8 @@ export class SearchBar extends Component {
                     onChange={ e => this.handleChange(e) }
                 />
                 <input 
-                    className='button' 
+                    className='button'
+                    value='Search' 
                     type='submit'
                 />
 
@@ -66,7 +45,7 @@ export class SearchBar extends Component {
 
 function mapStateToProps(state) {
     return {
-        searchedBreeds: state.searchedBreeds
+        searchedBreed: state.searchedBreed
     }
 };
 
@@ -74,7 +53,7 @@ function mapDispatchToProps(dispatch) {
     return {
         getAllBreeds: () => dispatch(getAllBreeds()),
         getBreedsByName: breedName => dispatch(getBreedsByName( breedName )),
-        clearState: () => dispatch(clearState())
+        setBreedName: breedName => dispatch(setBreedName( breedName ))
     }
 };
 

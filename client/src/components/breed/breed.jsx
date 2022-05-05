@@ -10,7 +10,7 @@ export class BreedCard extends Component {
         const { id, breed, weight, temper, ext, imgUrl } = this.props
         return (
             <Link to={`/breeds/${id}?ext=${ext}`} className='breed-link'>
-                <img className="breed-img" src={ imgUrl !== '' ? imgUrl : dogIcon} />
+                <img className="breed-img" src={ imgUrl !== '' ? imgUrl : dogIcon} alt={breed} />
                 <div className='breed-container'>
                     Name: {breed} |
                     Weight: {weight} <br />

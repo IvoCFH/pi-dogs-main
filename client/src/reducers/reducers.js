@@ -32,10 +32,17 @@ function rootReducer(state = initialState, { type, payload }) {
         }
     };
 
-    if ( type === 'CLEAR_STATE' ) {
+    if ( type === 'CLEAR_DETAIL' ) {
         return {
             ...state,
-            filteredBreeds: []
+            breedDetail: {}
+        }
+    }
+
+    if ( type === 'SET_BREED_NAME' ) {
+        return {
+            ...state,
+            searchedBreed: payload
         }
     }
 

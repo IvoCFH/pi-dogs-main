@@ -15,3 +15,7 @@
 .applyBtn {
     margin: 10px auto;
 }
+
+.tempFilter {
+    max-width: 100px;
+}

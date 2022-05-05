@@ -1,17 +1,34 @@
 // CLEAN STATES REGISTERS
-export function clearState() {
-    return { type: 'CLEAR_STATE' }
+export function clearDetail() {
+    return { type: 'CLEAR_DETAIL' }
 }
 
+export function setBreedName(breedName) {
+    return function(dispatch) {
+        dispatch({
+            type: 'SET_BREED_NAME',
+            payload: breedName
+        })
+    }
+}
 
 //GET ALL BREEDS
-export function getAllBreeds() {
+export function getAllBreeds(options) {
+    console.log('getAllBreeds action');
+    console.log(options);
+    let url = 'http://localhost:3001/dogs';
+    if ( options ) {
+        const { prop, order, temper, getData } = options;
+        if (prop && order) url += `&prop=${prop}&order=${order}`;
+        if (getData) url += `&getData=${getData}`;
+        if (temper !== 'none') url += `&temper=${temper}`;
+    }
     return function(dispatch) {
-        return fetch('http://localhost:3001/dogs', { method: 'GET' } )
+        return fetch(url, { method: 'GET' } )
             .then( data => data.json())
             .then( json => {
                 console.log(json);
-                dispatch({ type: 'GET_ALL_BREEDS', payload: json });
+                dispatch({ type: 'GET_ALL_BREEDS', payload: {data: json} });
                 }
             )            
     }
@@ -19,7 +36,7 @@ export function getAllBreeds() {
 
 // GET BREEDS BY NAME
 export function getBreedsByName( breedName, options ) {
-    console.log('actions');
+    console.log('getBreedsByName action');
     console.log(breedName);
     console.log(options);
     let url = `http://localhost:3001/dogs?name=${breedName}`;
@@ -27,6 +44,7 @@ export function getBreedsByName( breedName, options ) {
         const { prop, order, temper, getData } = options;
         if (prop && order) url += `&prop=${prop}&order=${order}`;
         if (getData) url += `&getData=${getData}`;
+        if (temper !== 'none') url += `&temper=${temper}`;
     }
     return function(dispatch) {
         // ESTO ES PARA ANULAR LA SOLICITUD QUE SE HACE CON CADA TiPEO EN LA BARRA DE BUSQUEDA
@@ -44,46 +62,7 @@ export function getBreedsByName( breedName, options ) {
         // }
     }
 
-
-    // return function(dispatch) {
-    //     // ESTO ES PARA ANULAR LA SOLICITUD QUE SE HACE CON CADA TYPEO EN LA BARRA DE BUSQUEDA
-    //     // if ( target === 'form' ) {
-    //         return fetch(`http://localhost:3001/dogs?name=${breedName}&prop=${prop}&order=${order}`, { method: 'GET' })
-    //             .then( data => data.json())
-    //             .then( json => {
-    //                 console.log(json)
-    //                 dispatch({ 
-    //                     type: 'GET_BREEDS_BY_NAME', 
-    //                     payload: { searchedBreed: breedName, data: json }
-    //                 })
-    //             })
-    //             .catch( err => console.log(err) )       
-    //     // }
-    // }}
-
-
-
-
 }
-/*
-// GET ORDERED BREEDS BY NAME
-export function getBreedsByName( breedName, target ) {
-    return function(dispatch) {
-        if ( target === 'form' ) {
-            return fetch(`http://localhost:3001/dogs?name=${breedName}`, { method: 'GET' })
-                .then( data => data.json())
-                .then( json => {
-                    console.log(json)
-                    dispatch({ 
-                        type: 'GET_BREEDS_BY_NAME', 
-                        payload: { data: json, target: target }
-                    })
-                })
-                .catch( err => console.log(err) )       
-        }
-    }
-}*/
-
 // GET BREED DETAIL
 export function getBreedDetail(breedId, ext) {
     return function(dispatch) {

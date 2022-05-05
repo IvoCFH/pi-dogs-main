@@ -3,7 +3,8 @@ import { Component } from 'react';
 import { connect } from 'react-redux';
 import { BreedCard } from '../breed/breed';
 // import { getBreedDetail } from '../../actions';
-import searchIcon from '../../imgs/search-icon.png';
+import loading from '../../imgs/loading.png';
+import { getAllBreeds } from '../../actions';
 
 export class BreedList extends Component {
     constructor(props) {
@@ -30,11 +31,25 @@ export class BreedList extends Component {
     };
 
     orderView(arr) {
+        console.log('ordered view')
         if (arr.length > 8) {
             console.log(this.state.page);
             return arr.slice(this.state.page * 8, (this.state.page * 8) + 8)
         }
         else return arr
+    }
+
+    componentDidMount() {
+        this.props.getAllBreeds();
+    }
+
+    componentDidUpdate(prevProps) {
+        if ( prevProps.filteredBreeds.length !== this.props.filteredBreeds.length ) {
+            this.setState({
+                ...this.state,
+                page: 0
+            })
+        }
     }
 
     render() {
@@ -80,15 +95,13 @@ export class BreedList extends Component {
             return (
                 <div className='listContainer'>
                     <div className='noBreedsLoaded'>                        
-                        <p>Search for your favourite breed!</p><br/>
-                        <img src={searchIcon} alt="search-icon" width="200px" />
+                        <img src={loading} alt="loading" width="400px" />
                     </div>
                 </div>
             )
         }
     }
 }
-
 
 function mapStateToProps(state) {
     return {
@@ -98,7 +111,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return {
-        // getBreedDetail: breedName => dispatch(getBreedDetail(breedName))
+        getAllBreeds: () => dispatch(getAllBreeds())
     }
 };
 

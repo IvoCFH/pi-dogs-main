@@ -53,6 +53,7 @@ export class Filters extends Component {
     handleSubmit(e) {
         e.preventDefault();
         console.log('submit')
+        console.log(this.state)
         if ( this.props.searchedBreed ) {
             this.props.getBreedsByName(this.props.searchedBreed, this.state)
         }
@@ -186,7 +187,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return {
         getBreedsByName: (breed, options) => dispatch(getBreedsByName(breed, options)),
-        getAllBreeds: () => dispatch(getAllBreeds())
+        getAllBreeds: (options) => dispatch(getAllBreeds(options))
     }
 };
 

@@ -19,6 +19,7 @@ export function getAllBreeds(options) {
     let url = 'http://localhost:3001/dogs';
     if ( options ) {
         const { prop, order, temper, getData } = options;
+        url += '?g=ab'
         if (prop && order) url += `&prop=${prop}&order=${order}`;
         if (getData) url += `&getData=${getData}`;
         if (temper !== 'none') url += `&temper=${temper}`;

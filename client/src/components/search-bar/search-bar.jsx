@@ -21,7 +21,8 @@ export class SearchBar extends Component {
     render() {
         return (
             <form 
-                name = 'form' 
+                name = 'form'
+                id = 'form' 
                 className='search-container' 
                 onSubmit={ e => this.handleSubmit(e)}
             >

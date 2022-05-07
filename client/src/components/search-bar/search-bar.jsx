@@ -35,6 +35,7 @@ export class SearchBar extends Component {
                 />
                 <input 
                     className='button'
+                    name="submit-button"
                     value='Search' 
                     type='submit'
                 />

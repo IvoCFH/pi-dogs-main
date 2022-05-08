@@ -2,8 +2,18 @@
     width: 20%;
     min-height: 400px;
     padding: 1.5%;
-    background-color: rgba(137, 43, 226, 0.366);
+    background-color: rgba(0, 0, 0, 0.658);
     min-width: 150px;
+    border-right: 3px solid rgb(78, 78, 78);
+    color: rgb(255, 255, 255);
+    font-size: medium;
+}
+
+.fieldset {
+    border: 2px solid rgb(185, 185, 185);
+    border-radius: 5px;
+    margin-bottom: 10px;
+    
 }
 
 .filtersForm {
@@ -12,9 +22,27 @@
     align-items: center;
 }
 
-.applyBtn {
-    margin: 10px auto;
+.styled-btn {
+    background-color: rgba(128, 128, 128, 0.521);
+    color: white;
+    border: 2px solid rgb(185, 185, 185);
+    border-radius: 5px;
+    font-weight: bolder;
+    align-self: stretch;
 }
+
+.pos-btn {
+    display: block;
+    margin: 15px auto;
+    height: 35px;
+    
+}
+
+.styled-btn:hover {
+    background-color: rgb(163, 163, 163);
+    cursor: pointer;
+}
+
 
 .tempFilter {
     max-width: 100px;

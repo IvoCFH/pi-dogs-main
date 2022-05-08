@@ -29,7 +29,7 @@ function notNums(data) {
 }
 
 function notSymbols(data) {
-    if ( data.match(/\W/) === null ) return '';
+    if ( data.match(/\W/) === null || data[data.match(/\W/).index] === ' ' ) return '';
     return "Field cannot contain symbols"; 
 }
 

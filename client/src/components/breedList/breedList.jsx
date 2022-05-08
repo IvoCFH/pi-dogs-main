@@ -15,7 +15,7 @@ export class BreedList extends Component {
     }
 
     changePage(e) {
-        console.log(e.target.name)
+        // console.log(e.target.name)
         if (e.target.name === 'next' && (this.state.page * 8) + 8 <= this.props.filteredBreeds.length) {
             this.setState({
                 ...this.state,
@@ -31,7 +31,7 @@ export class BreedList extends Component {
     };
 
     orderView(arr) {
-        console.log('ordered view')
+        // console.log('ordered view')
         if (arr.length > 8) {
             console.log(this.state.page);
             return arr.slice(this.state.page * 8, (this.state.page * 8) + 8)
@@ -62,32 +62,36 @@ export class BreedList extends Component {
                             <button 
                                 name='prev'
                                 onClick={ e => this.changePage(e) }
+                                className="styled-btn darker"
                             >
                                 Previous
                             </button>
-                            {this.state.page + 1}
+                            {`${this.state.page + 1} of ${ Math.round(this.props.filteredBreeds.length / 8)}`}
                             <button 
                                 name='next'
                                 onClick={ e => this.changePage(e) }
+                                className="styled-btn darker"
                             >
                                 Next
                             </button>
                         </div>
                     }
-                    {orderedView.map( breed => {
-                        let temper = breed.temper.join(', ');
-                        return (
-                            <BreedCard 
-                                key = { breed.id }
-                                id = { breed.id }
-                                breed = { breed.name }
-                                weight = { breed.weight }
-                                temper = { temper }
-                                ext = { breed.external }
-                                imgUrl = { breed.imgUrl }
-                            />
-                        )
-                    })}
+                    <div className='elem-list'>
+                        {orderedView.map( breed => {
+                            let temper = breed.temper.join(', ');
+                            return (
+                                <BreedCard 
+                                    key = {`${breed.id}_${breed.name}`}
+                                    id = { breed.id }
+                                    breed = { breed.name }
+                                    weight = { breed.weight }
+                                    temper = { temper }
+                                    ext = { breed.external }
+                                    imgUrl = { breed.imgUrl }
+                                />
+                            )
+                        })}
+                    </div>
                 </div>
             )
         }

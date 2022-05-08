@@ -30,9 +30,7 @@ router.get('/', async function(req, res) {
             }
 
             // Consulta a la base de datos por todas las razas que contengan el string proporcionado
-            const queryBreeds = await Dog.findAll({
-                
-            });
+            const queryBreeds = await Dog.findAll(dbQuery);
             // Arma el array de breed LOCALES.
             const newArrBreeds = await Promise.all(queryBreeds.map(async elem => {
                 let temper = await elem.getTempers();
@@ -52,8 +50,9 @@ router.get('/', async function(req, res) {
         // Lo obtenido se inserta en totalBreeds
         if ( !getData || getData === 'both' || getData === 'external' ) {
             let url = `https://api.thedogapi.com/v1/breeds`
-            if ( name ) url += `/search?q=${name}&api_key=${DOGS_API_KEY}`
-            else url += `?api_key=${DOGS_API_KEY}`
+            if ( !name ) url += `?api_key=${DOGS_API_KEY}`
+            else url += `/search?q=${name}&api_key=${DOGS_API_KEY}` 
+            console.log('URL')
             console.log(url)
             // Consulta a la api externa por todas las razas que contengan el string proporcionado
             const extBreeds = await axios(url)

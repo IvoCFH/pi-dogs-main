@@ -13,7 +13,7 @@ export class SearchBar extends Component {
     handleSubmit(e) {
         e.preventDefault();
         console.log('submited');
-        if ( this.props.searchedBreed !== '' ) this.props.getBreedsByName( this.props.searchedBreed );
+        if ( !!this.props.searchedBreed && this.props.searchedBreed !== '' ) this.props.getBreedsByName( this.props.searchedBreed );
         else this.props.getAllBreeds();
         
     };
@@ -34,7 +34,7 @@ export class SearchBar extends Component {
                     onChange={ e => this.handleChange(e) }
                 />
                 <input 
-                    className='button'
+                    className='pos-search-btn styled-btn'
                     name="submit-button"
                     value='Search' 
                     type='submit'

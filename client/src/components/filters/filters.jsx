@@ -66,7 +66,7 @@ export class Filters extends Component {
         return (
             <div className='filtersContainer'>
                 <form className='filterForm'>
-                    <fieldset>
+                    <fieldset className='fieldset'>
                         <legend>Order by</legend>
                         <div>
                             <input 
@@ -114,7 +114,7 @@ export class Filters extends Component {
                             <label>Max weight</label>
                         </div>
                     </fieldset>
-                    <fieldset>
+                    <fieldset className='fieldset'>
                         <legend>Get Data From</legend>
                             <div>
                                 <input 
@@ -150,7 +150,7 @@ export class Filters extends Component {
                                 <label>External</label>
                             </div>
                     </fieldset>
-                    <fieldset>
+                    <fieldset className='fieldset'>
                         <legend>Temperament</legend>
                         <div>
                             <input 
@@ -164,12 +164,14 @@ export class Filters extends Component {
                         </div>
                     </fieldset>
                     
-                    <input 
-                        type="submit" 
-                        value='Apply Filters' 
-                        className='applyBtn'
-                        onClick={ e => this.handleSubmit(e) }
-                    />
+                    <div className='submit-container'>
+                        <input 
+                            type="submit" 
+                            value='Apply' 
+                            className='styled-btn pos-btn'
+                            onClick={ e => this.handleSubmit(e) }
+                        />
+                    </div>
 
                 </form>
             </div>

@@ -1,23 +1,19 @@
 .search-container {
     width: 100%;
-    min-height: 60px;   
+    min-height: 40px;   
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
-    background-color: rgba(43, 92, 226, 0.562);
+    background-color: rgba(0, 0, 0, 0.658);
 }
 
-.button {
-    border: 1px solid grey;
-    height: 30px;
-    margin-left: 10px;
-    border-radius: 5px;
+.pos-search-btn {
+    min-width: 60px;
+    width: 5%;
 }
 
 .input {
-    border: 1px solid grey;
-    height: 30px;
-    border-radius: 5px;
     font-size: large;
-    width: 70%;
+    width: 95%;
+    
 }
